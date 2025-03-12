@@ -57,3 +57,5 @@ Each question offers three options:
 通过这个系统，用户可以全面了解自己的财富状况，并获得有针对性的改进建议。
 
 Through this system, users can comprehensively understand their wealth status and receive targeted improvement suggestions.
+![image](https://github.com/user-attachments/assets/ffd2d86c-022c-4010-8a82-80ed935f22b4)
+
