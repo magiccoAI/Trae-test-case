@@ -3,7 +3,8 @@
 ## 简介 | Introduction
 
 财富评分系统是一个全面的个人财富评估工具，通过五个维度的深入分析，帮助用户了解并提升自己的整体财富状况。
-Attribute: 5种财富的评估问题来源于《知行小酒馆》播客 E180《你一生的财富》
+Attribute: 5种财富的评估问题来源于播客《知行小酒馆》 E180《你一生的财富》
+           https://www.xiaoyuzhoufm.com/episode/67ca67e5e924d4525adf4ac8
 
 The Wealth Assessment System is a comprehensive personal wealth evaluation tool that helps users understand and improve their overall wealth status through in-depth analysis across five dimensions.
 
