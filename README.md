@@ -1,4 +1,4 @@
-# 财富评分系统 | Wealth Assessment System
+# 财富评分网页 | Wealth Assessment
 
 ## 简介 | Introduction
 
