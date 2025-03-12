@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -55,7 +56,7 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f9f9f9;
             transition: background-color 0.3s ease;
         }
         body[data-category="time"] { background-color: #E3F2FD; }
@@ -87,24 +88,30 @@
         .options {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
+            gap: 15px;
+            margin-top: 20px;
         }
         .option {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
             cursor: pointer;
             text-align: center;
             transition: all 0.3s ease;
+            font-size: 15px;
+            background-color: white;
         }
         .option:hover {
-            background-color: #f0f0f0;
+            border-color: #4CAF50;
+            background-color: rgba(76, 175, 80, 0.05);
         }
         .option.selected {
             background-color: #4CAF50;
             color: white;
             border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
         }
         #submitBtn {
             display: block;
@@ -120,6 +127,24 @@
         }
         #submitBtn:hover {
             background-color: #45a049;
+        }
+        #progress-indicator {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            transition: width 0.3s ease;
         }
         #result {
             display: none;
@@ -150,7 +175,8 @@
             margin: 8px 0;
             line-height: 1.5;
         }
-        text-align: center;
+
+
     </style>
 </head>
 <body>
@@ -389,8 +415,30 @@
             health: 0,
             money: 0
         };
+        let totalQuestions = 0;
+        let answeredQuestions = 0;
+
+        // 计算总问题数
+        document.querySelectorAll('.question').forEach(() => {
+            totalQuestions++;
+        });
+
+        // 添加进度指示器
+        const progressDiv = document.createElement('div');
+        progressDiv.id = 'progress-indicator';
+        progressDiv.innerHTML = `
+            <div>完成进度: <span id="progress-text">0/${totalQuestions}</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+        `;
+        document.querySelector('#survey').insertBefore(progressDiv, document.querySelector('#submitBtn'));
+
+        // 初始化时隐藏提交按钮
+        document.getElementById('submitBtn').style.display = 'none';
 
         // 切换分类
+        const categories = ['time', 'social', 'spirit', 'health', 'money'];
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -403,16 +451,74 @@
                     }
                 });
                 document.body.dataset.category = currentCategory;
+                updateNextButtonVisibility();
             });
+        });
+
+        // 检查当前分类是否已完成
+        function isCurrentCategoryCompleted() {
+            const currentContent = document.querySelector(`.category-content[data-category="${currentCategory}"]`);
+            const questions = currentContent.querySelectorAll('.question');
+            return Array.from(questions).every(q => q.querySelector('.option.selected'));
+        }
+
+        // 更新继续按钮显示状态
+        function updateNextButtonVisibility() {
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.dataset.category = currentCategory;
+            if (isCurrentCategoryCompleted()) {
+                const currentIndex = categories.indexOf(currentCategory);
+                if (currentIndex < categories.length - 1) {
+                    nextBtn.style.display = 'block';
+                } else {
+                    nextBtn.style.display = 'none';
+                    document.getElementById('submitBtn').style.display = 'block';
+                }
+            } else {
+                nextBtn.style.display = 'none';
+            }
+        }
+
+        // 继续按钮点击事件
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            const currentIndex = categories.indexOf(currentCategory);
+            if (currentIndex < categories.length - 1) {
+                const nextCategory = categories[currentIndex + 1];
+                document.querySelector(`.tab-btn[data-category="${nextCategory}"]`).click();
+                const nextContent = document.querySelector(`.category-content[data-category="${nextCategory}"]`);
+                nextContent.scrollIntoView({ behavior: 'smooth' });
+            }
         });
 
         // 选项点击事件
         document.querySelectorAll('.option').forEach(option => {
             option.addEventListener('click', () => {
                 const questionDiv = option.closest('.question');
+                const wasSelected = questionDiv.querySelector('.option.selected');
                 questionDiv.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
                 option.classList.add('selected');
+
+                // 更新已回答问题数
+                if (!wasSelected) {
+                    answeredQuestions++;
+                    updateProgress();
+                }
+                
+                // 更新继续按钮状态
+                updateNextButtonVisibility();
             });
+
+            // 更新进度和提交按钮显示状态
+            function updateProgress() {
+                const progress = (answeredQuestions / totalQuestions) * 100;
+                document.querySelector('.progress-fill').style.width = `${progress}%`;
+                document.getElementById('progress-text').textContent = `${answeredQuestions}/${totalQuestions}`;
+
+                // 当所有问题都回答完时显示提交按钮
+                if (answeredQuestions === totalQuestions) {
+                    document.getElementById('submitBtn').style.display = 'block';
+                }
+            }
         });
 
         // 提交评估
@@ -490,3 +596,9 @@
     </script>
 </body>
 </html>
+
+    
+    </style>
+</head>
+</html>
+
