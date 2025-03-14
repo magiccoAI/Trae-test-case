@@ -1,11 +1,24 @@
 
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>财富评分系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        #radarChart {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        #wealthRadar {
+            width: 100% !important;
+            height: auto !important;
+            aspect-ratio: 1;
+        }
         .category-tabs {
             display: flex;
             justify-content: center;
@@ -59,7 +72,7 @@
             background-color: #f9f9f9;
             transition: background-color 0.3s ease;
         }
-        body[data-category="time"] { background-color: #E3F2FD; }
+        body[data-category="time"] { background-color: #F0F8FF; }
         body[data-category="social"] { background-color: #FCE4EC; }
         body[data-category="spirit"] { background-color: #F3E5F5; }
         body[data-category="health"] { background-color: #E8F5E9; }
@@ -149,32 +162,60 @@
         #result {
             display: none;
             margin-top: 30px;
-            padding: 20px;
-            background-color: #e8f5e9;
-            border-radius: 5px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease-out;
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .category-result {
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideIn 0.5s ease-out;
+            animation-fill-mode: both;
         }
-        .category-result:nth-child(2) { background-color: #E3F2FD; }
-        .category-result:nth-child(3) { background-color: #FCE4EC; }
-        .category-result:nth-child(4) { background-color: #F3E5F5; }
-        .category-result:nth-child(5) { background-color: #E8F5E9; }
-        .category-result:nth-child(6) { background-color: #FFF3E0; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .category-result:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        
         .category-result h3 {
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 8px;
+            font-size: 1.4em;
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+        
         .category-result p {
-            margin: 8px 0;
-            line-height: 1.5;
+            margin: 0;
+            color: #5a6c7d;
+            line-height: 1.6;
+            font-size: 1.1em;
         }
+        
+        .category-result:nth-child(2) { background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(33, 150, 243, 0.15)); }
+        .category-result:nth-child(3) { background: linear-gradient(135deg, rgba(233, 30, 99, 0.15), rgba(233, 30, 99, 0.15)); }
+        .category-result:nth-child(4) { background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(156, 39, 176, 0.15)); }
+        .category-result:nth-child(5) { background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.15)); }
+        .category-result:nth-child(6) { background: linear-gradient(135deg, rgba(250, 151, 3, 0.15), rgba(250, 151, 4, 0.15)); }
+        
 
 
     </style>
@@ -182,7 +223,9 @@
 <body>
     <div class="container">
         <h1>财富评分系统</h1>
-        <p style="color: #666; font-size: 14px; margin: 10px 0 30px; text-align: center; line-height: 1.6;">在这里我们来做一个小测试，给自己的5种财富打打分。这个练习可以帮助你直观的看到自己在哪些方面比较富足，哪些方面相对匮乏，从而就找到需要优先提升的方面。你可以根据每个问题选择"很同意"（4分）、"中立"（2分）或"不同意"（0分）进行评分，系统会根据你的选择计算总分并提供个性化的建议。</p>
+        <p style="color: #679eb0; font-size: 14px; margin: 10px 0 30px; text-align: center; line-height: 1.6;">在这里来做为一个小测试，给自己5种财富打分。这个测验可以帮助您直观地看到自己在哪些方面比较富足，哪些方面相对匮乏，从而找到需要优先提升的方面。每个财富有五条论断，如果你很同意，可以打4分，觉得不同意可以打0分，中立是2分。
+            请选择一个最能准确描述您当前状况的答案。完成所有问题后，您将收到您的财富分数和可视化效果。</p>
+        <p style="color: #a0a7a9; font-size: 12px; margin: 10px 0 30px; text-align: center; line-height: 1.6;">*这个财富评分不是为了给自己贴标签或妄自菲薄，而是一个起点。知道了哪里薄弱，我们才能更有针对性地行动。</p>
         <div class="category-tabs">
             <button class="tab-btn active" data-category="time">时间财富</button>
             <button class="tab-btn" data-category="social">社交财富</button>
@@ -217,7 +260,7 @@
                 </div>
             </div>
             <div class="question" data-id="4">
-                <p>4. 我很少觉得太忙或者注意力分散，以至于没办法处理我觉得最重要的事情</p>
+                <p>4. 我很少觉得太忙或者注意力分散，以至于没办法处理我觉得最重要的任务</p>
                 <div class="options">
                     <div class="option" data-score="4">很同意 (4分)</div>
                     <div class="option" data-score="2">中立 (2分)</div>
@@ -540,6 +583,9 @@
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
                 <h2>评估结果</h2>
+                <div id="radarChart">
+                    <canvas id="wealthRadar"></canvas>
+                </div>
                 <div class="category-result">
                     <h3>时间财富: ${scores.time}分</h3>
                     <p>${getTimeAdvice(scores.time)}</p>
@@ -561,6 +607,85 @@
                     <p>${getMoneyAdvice(scores.money)}</p>
                 </div>
             `;
+
+            // 创建圆形分区图
+            const ctx = document.getElementById('wealthRadar').getContext('2d');
+            canvas = document.getElementById('wealthRadar');
+            canvas.style.width = '400px';
+            canvas.style.height = '400px';
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['时间\n财富', '社交\n财富', '精神\n财富', '健康\n财富', '金钱\n财富'],
+                    datasets: [{
+                        data: [scores.time, scores.social, scores.spirit, scores.health, scores.money],
+                        backgroundColor: [
+                            'rgba(30, 144, 255, 0.7)',  // 天蓝色 - 时间
+                            'rgba(255, 105, 180, 0.7)',  // 粉红色 - 社交
+                            'rgba(147, 112, 219, 0.7)',  // 紫色 - 精神
+                            'rgba(60, 179, 113, 0.7)',   // 翠绿色 - 健康
+                            'rgba(255, 165, 0, 0.7)'     // 橙色 - 金钱
+                        ],
+                        borderColor: 'rgba(255, 255, 255, 0.9)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    },
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 20,
+                            ticks: {
+                                stepSize: 4,
+                                display: true,
+                                font: {
+                                    size: 12,
+                                    family: 'Arial'
+                                },
+                                color: '#666',
+                                backdropColor: 'rgba(255, 255, 255, 0.8)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                circular: true
+                            },
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold',
+                                    family: 'Arial'
+                                },
+                                color: '#333',
+                                padding: 20
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + ' 分';
+                                }
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: 20
+                    }
+                }
+            });
         });
 
         // 建议函数
@@ -597,8 +722,5 @@
 </body>
 </html>
 
-    
-    </style>
-</head>
-</html>
+
 
