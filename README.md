@@ -8,7 +8,7 @@
 
 Credit: 5种财富的评估问题来源于播客《知行小酒馆》 E180《你一生的财富》,详见https://www.xiaoyuzhoufm.com/episode/67ca67e5e924d4525adf4ac8
 
-The Wealth Assessment System is a comprehensive personal wealth evaluation tool that helps users understand and improve their overall wealth status through in-depth analysis across five dimensions.
+The Wealth Assessment System is a simple personal wealth evaluation tool that helps users understand and improve their overall wealth status through in-depth analysis across five dimensions.
 
 ## 评估维度 | Assessment Dimensions
 
