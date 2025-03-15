@@ -1,4 +1,4 @@
-# 财富评分网页 | Wealth Assessment
+# 财富评分测验网页 | Wealth Assessment Quiz
 
 ## 简介 | Introduction
 
