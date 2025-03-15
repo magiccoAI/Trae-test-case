@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>财富评分测验</title>
+    <title>财富评分测试</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         #radarChart {
@@ -18,6 +16,12 @@
             width: 100% !important;
             height: auto !important;
             aspect-ratio: 1;
+        }
+        .chart-tip {
+            text-align: center;
+            color: #888;
+            font-size: 11px;
+            margin-top: 10px;
         }
         .category-tabs {
             display: flex;
@@ -205,7 +209,7 @@
         
         .category-result p {
             margin: 0;
-            color: #5a6c7d;
+            color: #627c95;
             line-height: 1.6;
             font-size: 1.1em;
         }
@@ -214,9 +218,48 @@
         .category-result:nth-child(3) { background: linear-gradient(135deg, rgba(233, 30, 99, 0.15), rgba(233, 30, 99, 0.15)); }
         .category-result:nth-child(4) { background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(156, 39, 176, 0.15)); }
         .category-result:nth-child(5) { background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.15)); }
-        .category-result:nth-child(6) { background: linear-gradient(135deg, rgba(250, 151, 3, 0.15), rgba(250, 151, 4, 0.15)); }
+        .category-result:nth-child(6) { background: linear-gradient(135deg, rgba(250, 151, 4, 0.15), rgba(250, 151, 4, 0.15)); }
         
-
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .score-item {
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            transition: transform 0.3s ease;
+        }
+        
+        .score-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .score-item.time { background: linear-gradient(135deg, #2196F3, #03A9F4); }
+        .score-item.social { background: linear-gradient(135deg, #E91E63, #F06292); }
+        .score-item.spirit { background: linear-gradient(135deg, #9C27B0, #BA68C8); }
+        .score-item.health { background: linear-gradient(135deg, #4CAF50, #81C784); }
+        .score-item.money { background: linear-gradient(135deg, #FF9800, #FFB74D); }
+        
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
 
     </style>
 </head>
@@ -260,7 +303,7 @@
                 </div>
             </div>
             <div class="question" data-id="4">
-                <p>4. 我很少觉得太忙或者注意力分散，以至于没办法处理我觉得最重要的任务</p>
+                <p>4. 我很少觉得太忙或者注意力分散，以至于没办法处理我觉得最重要的事情</p>
                 <div class="options">
                     <div class="option" data-score="4">很同意 (4分)</div>
                     <div class="option" data-score="2">中立 (2分)</div>
@@ -278,7 +321,7 @@
         </div>
             <div class="category-content" data-category="social">
                 <div class="question" data-id="6">
-                    <p>1. 我拥有一些深厚的充满爱的支撑性的关系</p>
+                    <p>1. 我拥有一些深厚的、充满爱的、支撑性的关系</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -294,7 +337,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="8">
-                    <p>3. 我拥有一个由松散关系组成的网络，我可以从中学习和进步</p>
+                    <p>3. 我有一个由松散关系组成的网络，我可以从中学习和进步</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -310,7 +353,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="10">
-                    <p>5. 我不试图通过物质购买来获得尊重、声望和羡慕</p>
+                    <p>5. 我不试图通过物质购买来获得respect、声望和羡慕</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -336,7 +379,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="13">
-                    <p>3. 我追求成长和进步，并且始终追求激发我的全部潜能</p>
+                    <p>3. 我追求成长，并且始终追求激发我的全部潜能</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -344,7 +387,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="14">
-                    <p>4. 我有一个根本的信念，就是我可以不断地改变、发展和适应环境</p>
+                    <p>4. 我有一个根本的信念，就是我可以不断地改变、发展和适应</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -386,7 +429,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="19">
-                    <p>4. 我通常每个晚上睡7个小时以上，醒来的时候感到自己已经恢复了精神焕发</p>
+                    <p>4. 我通常每个晚上睡7个小时以上，醒来的时候感到精神焕发</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -394,7 +437,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="20">
-                    <p>5. 我有一个明确的计划，让我在以后的岁月里也可以尽可能的保持精力</p>
+                    <p>5. 我有一个明确的计划，让我在以后的岁月里也可以尽可能保持活力</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -404,7 +447,7 @@
             </div>
             <div class="category-content" data-category="money">
                 <div class="question" data-id="21">
-                    <p>1. 我对经济上足够有一个明确的定义</p>
+                    <p>1. 我对「经济上足够」有一个明确的定义</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -412,7 +455,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="22">
-                    <p>2. 我的收入随着我的技能和专业知识可以稳步增长</p>
+                    <p>2. 我的收入随着我的技能和专业知识而稳步增长</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -420,7 +463,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="23">
-                    <p>3. 我管理着我的月度支出，确保我的支出低于我的收入</p>
+                    <p>3. 我管理我的月度支出，确保我的支出低于我的收入</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -428,7 +471,7 @@
                     </div>
                 </div>
                 <div class="question" data-id="24">
-                    <p>4. 我有一个清晰的投资计划，我将每个月的结余用于长期的复利投资</p>
+                    <p>4. 我有一个清晰投资计划，将每个月的结余用于长期的复利投资</p>
                     <div class="options">
                         <div class="option" data-score="4">很同意 (4分)</div>
                         <div class="option" data-score="2">中立 (2分)</div>
@@ -585,6 +628,29 @@
                 <h2>评估结果</h2>
                 <div id="radarChart">
                     <canvas id="wealthRadar"></canvas>
+                    <div class="chart-tip">可以截图保存您的图表，方便分享或记录进度。</div>
+                </div>
+                <div class="score-grid">
+                    <div class="score-item time">
+                        <div class="score-value">${scores.time}</div>
+                        <div class="score-label">TIME</div>
+                    </div>
+                    <div class="score-item social">
+                        <div class="score-value">${scores.social}</div>
+                        <div class="score-label">SOCIAL</div>
+                    </div>
+                    <div class="score-item spirit">
+                        <div class="score-value">${scores.spirit}</div>
+                        <div class="score-label">MENTAL</div>
+                    </div>
+                    <div class="score-item health">
+                        <div class="score-value">${scores.health}</div>
+                        <div class="score-label">PHYSICAL</div>
+                    </div>
+                    <div class="score-item money">
+                        <div class="score-value">${scores.money}</div>
+                        <div class="score-label">FINANCIAL</div>
+                    </div>
                 </div>
                 <div class="category-result">
                     <h3>时间财富: ${scores.time}分</h3>
@@ -721,6 +787,3 @@
     </script>
 </body>
 </html>
-
-
-
