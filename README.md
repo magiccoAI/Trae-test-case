@@ -53,10 +53,10 @@ Each question offers three options:
 1. 选择评估维度 | Select assessment dimension
 2. 回答相关问题 | Answer the questions
 3. 提交评估 | Submit assessment
-4. 获取详细报告和建议 | Receive detailed report and suggestions
+4. 获取建议 | Receive report and suggestions
 
 通过这个系统，用户可以全面了解自己的财富状况，并获得有针对性的改进建议。
 
-Through this system, users can comprehensively understand their wealth status and receive targeted improvement suggestions.
+Through this system, users can comprehensively understand their wealth status and receive improvement suggestions.
 ![image](https://github.com/user-attachments/assets/ffd2d86c-022c-4010-8a82-80ed935f22b4)
 
